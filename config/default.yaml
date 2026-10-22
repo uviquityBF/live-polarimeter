@@ -1,0 +1,30 @@
+# Default configuration for livepol.
+
+camera:
+  pixel_format: PolarizeMono12   # or PolarizeMono16
+  exposure_us: 5000
+  gain_db: 0.0
+  black_level: 0.0
+  binning: 1
+  roi: null                      # [x, y, width, height] sensor ROI, or null for full frame
+  average_frames: 1
+  # Full-scale raw value used for the saturation check (4095 for 12 bit, 65535 for 16 bit).
+  full_scale: 4095
+
+processing:
+  # Polarizer angle (deg) of each pixel in a 2x2 block, rows top to bottom.
+  # Recollection of the IMX250MZR layout; verify with the calibration utility.
+  layout: [[90, 45], [135, 0]]
+  aolp_offset_deg: 0.0           # angles are reported relative to this axis
+  saturation_fraction: 0.98      # warn at or above this fraction of full scale
+  roi:
+    mode: auto                   # auto | rect | circle
+    percentile: 99.5             # auto mode: S0 >= this percentile of the S0 image
+    rect: [0, 0, 100, 100]       # x, y, width, height in Stokes-image pixels
+    circle: [0, 0, 50]           # cx, cy, radius in Stokes-image pixels
+  dark_file: null
+  calibration_file: null
+
+display:
+  update_hz: 10
+  history_s: 60

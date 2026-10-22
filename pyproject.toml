@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "livepol"
+version = "0.1.0"
+description = "Live linear polarimeter for a LUCID Triton polarization camera (IMX250MZR)"
+requires-python = ">=3.9"
+dependencies = ["numpy", "pyyaml"]
+
+[project.optional-dependencies]
+gui = ["pyqtgraph", "PySide6"]
+camera = ["arena_api"]   # not on PyPI; install the wheel shipped with the Arena SDK
+dev = ["pytest"]
+
+[project.scripts]
+livepol = "livepol.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
