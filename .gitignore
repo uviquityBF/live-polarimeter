@@ -8,3 +8,4 @@ frames/
 *.npy
 *.csv
 snapshots/
+persist.json
