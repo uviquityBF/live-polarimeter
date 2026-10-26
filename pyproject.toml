@@ -16,6 +16,7 @@ dev = ["pytest"]
 
 [project.scripts]
 livepol = "livepol.main:main"
+livepol-probe = "livepol.probe:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

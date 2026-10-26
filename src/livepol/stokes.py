@@ -118,6 +118,16 @@ def circular_std_aolp(aolp_deg: Sequence[float]) -> float:
     return float(0.5 * np.degrees(np.sqrt(-2.0 * np.log(r))))
 
 
+def break_wraps(t: Sequence[float], aolp_deg: Sequence[float]) -> Tuple[np.ndarray, np.ndarray]:
+    """Like unwrap_aolp_for_plot, but returns (t, aolp) with a NaN inserted at every wrap."""
+    t = np.asarray(t, dtype=np.float64)
+    a = np.asarray(aolp_deg, dtype=np.float64)
+    if a.size < 2:
+        return t, a
+    j = np.where(np.abs(np.diff(a)) > 90.0)[0]
+    return np.insert(t, j + 1, t[j]), np.insert(a, j + 1, np.nan)
+
+
 def unwrap_aolp_for_plot(aolp_deg: Sequence[float]) -> np.ndarray:
     """Insert NaN where AoLP wraps (jump > 90 deg) so a line plot has no wrap-around spike."""
     a = np.asarray(aolp_deg, dtype=np.float64).copy()

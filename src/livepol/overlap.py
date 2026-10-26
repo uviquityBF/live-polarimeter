@@ -20,6 +20,24 @@ def overlap_loss_db(eta: float) -> float:
     return -10.0 * math.log10(eta) if eta > 0 else math.inf
 
 
+def average_state(dolp, aolp_deg, s0=None) -> dict:
+    """Average a run of samples into one reference state (arithmetic DoLP/S0, circular AoLP)."""
+    import numpy as np
+
+    from .stokes import circular_mean_aolp, circular_std_aolp
+
+    d = np.asarray(dolp, dtype=float)
+    a = np.asarray(aolp_deg, dtype=float)
+    ok = np.isfinite(d) & np.isfinite(a)
+    n = int(ok.sum())
+    if n == 0:
+        return {"n": 0, "dolp": float("nan"), "aolp_deg": float("nan"),
+                "dolp_std": float("nan"), "aolp_std_deg": float("nan"), "s0_mean": float("nan")}
+    s = float(np.mean(np.asarray(s0, dtype=float)[ok])) if s0 is not None else float("nan")
+    return {"n": n, "dolp": float(d[ok].mean()), "aolp_deg": circular_mean_aolp(a[ok]),
+            "dolp_std": float(d[ok].std()), "aolp_std_deg": circular_std_aolp(a[ok]), "s0_mean": s}
+
+
 def compare_states(aolp_a: float, dolp_a: float, aolp_b: float, dolp_b: float) -> dict:
     """delta (deg), eta and loss (dB) for a reference pair."""
     delta = angle_difference(aolp_a, aolp_b)
